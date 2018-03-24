@@ -18,50 +18,66 @@ The median is (2 + 3)/2 = 2.5
 
 class TwoArrayMedian {
 
-    public static double findMedianSortedArrays(int[] A, int[] B) {
-    	int m = A.length;
-        int n = B.length;
-        if (m > n) {
-            // Smaller array is always A of size m.
-            int[] temp = A; 
-            A = B; 
-            B = temp;
-            
-            int tmp = m; 
-            m = n; 
-            n = tmp;
-        }
+	public static double findMedianSortedArrays(int[] A, int[] B){
+		int[] smaller = null;
+		int[] bigger = null;
+		int m = 0;
+		int n = 0;
 
-        int iMin = 0; 
-        int iMax = m; 
-        int mid = (m + n + 1) / 2;
-        while (iMin <= iMax) {
-            int i = (iMin + iMax) / 2;
-            int j = mid - i;
+		if(A.length <= B.length){
+			m = A.length;
+			smaller= A;
+			n = B.length;
+			bigger = B;
+		}  else {
+			m = B.length;
+			smaller= B;
+			n = A.length;
+			bigger = A;
+		}
+		int left = 0;
+		int right = m;
 
-            if (i < iMax && A[i]< B[j-1]){
-                iMin = iMin + 1; // i is too small
-            }
-            else if (i < iMin && A[i-1] > B[j]) {
-                iMax = iMax - 1; // i is too big
-            }
-            else { // i is perfect
-                int maxLeft = 0;
-                if (i == 0) { maxLeft = B[j-1]; }
-                else if (j == 0) { maxLeft = A[i-1]; }
-                else { maxLeft = Math.max(A[i-1], B[j-1]); }
-                if ( (m + n) % 2 == 1 ) { return maxLeft; }
+		int mid = (m + n + 1)/2;
 
-                int minRight = 0;
-                if (i == m) { minRight = B[j]; }
-                else if (j == n) { minRight = A[i]; }
-                else { minRight = Math.min(B[j], A[i]); }
+		while(left<=right){
+			int i = (left + right)/2;
+			int j = mid - i; 
 
-                return (maxLeft + minRight) / 2.0;
-            }
-        }
-        return 0.0;
-    }
+			if(i < right && smaller[i] < bigger[j-1]){
+				// i is too small. We need to move right.
+				left = i + 1;
+			} else if(i > left && smaller[i-1] > bigger[j]){
+				// i is too large. We need to move left.
+				right = i - 1;
+			} else {
+				// i is just right.
+				int maxLeft = 0;
+				int minRight = 0;
+				if(i==0){
+					maxLeft = bigger[j-1];
+				}
+				else if(j==0){
+					maxLeft = smaller[i-1];
+				} else{
+					maxLeft = Math.max(smaller[i-1], bigger[j-1]);
+				}
+
+				if ( (m + n) % 2 == 1 ) { return maxLeft; }
+
+				if(i==m){
+					minRight = bigger[j];
+				}
+				else if(j==n){
+					minRight = smaller[i];
+				} else{
+					minRight = Math.min(smaller[i], bigger[j]);
+				}
+				return (maxLeft + minRight) / 2.0;
+			}
+		}
+		return 0.0;
+	}
 
     public static void main(String[] args) {
 
@@ -70,6 +86,7 @@ class TwoArrayMedian {
         int[] nums2 = {2,4,6};
         double answer = findMedianSortedArrays(nums1, nums2);
         String result = answer == 4 ? "Passed" : "Failed";
+
         System.out.println(result);
 
         // Testcase 2
