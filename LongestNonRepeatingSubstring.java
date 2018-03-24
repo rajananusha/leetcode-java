@@ -11,7 +11,7 @@ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer 
 */
 import java.util.HashMap;
 
-public class LongestSubstring {
+public class LongestNonRepeatingSubstring {
 
     public static int findLongestSubstringLength (String str) {
     	HashMap<Character, Integer> hm = new HashMap<Character, Integer>();
