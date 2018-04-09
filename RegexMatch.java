@@ -20,38 +20,15 @@ isMatch("aab", "c*a*b") → true
 */
 
 class RegexMatch {
-    public static boolean isMatch(String str, String regex) {
-    	if (str.length() == 0 || regex.length() == 0) return false;
-    	int i = 0, j = 0;
-    	char prev = regex.charAt(j);
-
-
-    	while(i<str.length() && j<regex.length()){
-
-    		if(str.charAt(i) == regex.charAt(j) || regex.charAt(j) == '.'){
-    			prev = regex.charAt(j);
-    			i++;
-    			j++;
-    		} else if(regex.charAt(j) == '*'){
-    			while(str.charAt(i) == prev || prev == '.'){
-    				i++;
-    				if(i==str.length()){
-    					j++;
-    					break;
-    				}
-    			}
-    		} else {
-    			return false;
-    		}
-    	}
-    	if(i<str.length() || j<regex.length()) {
-
-    		System.out.println(i);
-    		System.out.println(j);
-    		return false;
-    	}
-    	return true;
-
+    public static boolean isMatch(String text, String pattern) {
+        if(pattern.isEmpty()) return text.isEmpty();
+        boolean firstMatch = !text.isEmpty() && (text.charAt(0) == pattern.charAt(0) || pattern.charAt(0) =='.');
+        
+        if(pattern.length() >= 2 && pattern.charAt(1) == '*')
+            return isMatch(text, pattern.substring(2)) || firstMatch && isMatch(text.substring(1), pattern);
+            
+        else 
+            return firstMatch && isMatch(text.substring(1), pattern.substring(1));
     }
     public static void main(String[] args) {
 

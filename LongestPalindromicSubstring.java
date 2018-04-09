@@ -26,7 +26,6 @@ public class LongestPalindromicSubstring {
             left--;
             right++;
         }
-
         return right - left - 1;
 
     } 
